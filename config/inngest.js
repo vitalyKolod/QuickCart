@@ -1,6 +1,6 @@
-import User from '@/models/User'
 import { Inngest } from 'inngest'
-import { connect } from 'mongoose'
+import connectDB from './db'
+import User from '@/models/User'
 
 // Create a client to send and receive events
 export const inngest = new Inngest({ id: 'quickcart-next' })
@@ -9,7 +9,7 @@ export const inngest = new Inngest({ id: 'quickcart-next' })
 
 export const syncUserCreation = inngest.createFunction(
 	{
-		id: 'sync-user-form-clerk',
+		id: 'sync-user-from-clerk',
 	},
 	{
 		event: 'clerk/user.created',
@@ -25,8 +25,6 @@ export const syncUserCreation = inngest.createFunction(
 		}
 		await connectDB()
 		await User.create(userData)
-		await connectDB()
-		await User.findByIdAndUpdate(id, userData, { new: true })
 	}
 )
 
@@ -34,7 +32,7 @@ export const syncUserCreation = inngest.createFunction(
 
 export const syncUserUpdation = inngest.createFunction(
 	{
-		id: 'update-user-form-clerk',
+		id: 'update-user-from-clerk',
 	},
 	{
 		event: 'clerk/user.updated',
