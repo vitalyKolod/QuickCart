@@ -1,6 +1,7 @@
 import { inngest } from '@/config/inngest'
 import Product from '@/models/Product'
 import User from '@/models/User'
+import { getAuth } from '@clerk/nextjs/server'
 import { NextResponse } from 'next/server'
 
 export async function POST(request) {
@@ -25,7 +26,7 @@ export async function POST(request) {
 				address,
 				items,
 				amount: amount + Math.floor(amount * 0.02),
-				data: Data.now(),
+				data: Date.now(),
 			},
 		})
 
