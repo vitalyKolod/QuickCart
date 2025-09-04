@@ -1,6 +1,7 @@
 import { Inngest } from 'inngest'
 import connectDB from './db'
 import User from '@/models/User'
+import Order from '@/models/Order'
 
 // Create a client to send and receive events
 export const inngest = new Inngest({ id: 'quickcart-next' })
@@ -12,7 +13,7 @@ export const syncUserCreation = inngest.createFunction(
 		id: 'sync-user-from-clerk',
 	},
 	{
-		event: 'clerk/user.created',
+		event: 'user.created',
 	},
 
 	async ({ event }) => {
@@ -35,7 +36,7 @@ export const syncUserUpdation = inngest.createFunction(
 		id: 'update-user-from-clerk',
 	},
 	{
-		event: 'clerk/user.updated',
+		event: 'user.updated',
 	},
 	async ({ event }) => {
 		const { id, first_name, last_name, email_addresses, image_url } = event.data
@@ -57,11 +58,40 @@ export const syncUserDeletion = inngest.createFunction(
 		id: 'delete-user-with-clerk',
 	},
 	{
-		event: 'clerk/user.deleted',
+		event: 'user.deleted',
 	},
 	async ({ event }) => {
 		const { id } = event.data
 		await connectDB()
 		await User.findByIdAndDelete(id)
+	}
+)
+
+// Inngest function to create user's order in db
+
+export const createUserOrder = inngest.createFunction(
+	{
+		id: 'create-user',
+		batchEvents: {
+			maxSize: 25,
+			timeout: '5s',
+		},
+	},
+	{ event: '/order/created' },
+	async ({ events }) => {
+		const orders = events.map(event => {
+			return {
+				userId: event.data.userId,
+				items: event.data.items,
+				amount: event.data.amount,
+				address: event.data.address,
+				date: event.data.date,
+			}
+		})
+
+		await connectDB()
+		await Order.insertMany(orders)
+
+		return { success: true, processed: orders.length }
 	}
 )
