@@ -6,27 +6,27 @@ const HeaderSlider = () => {
   const sliderData = [
     {
       id: 1,
-      title: 'Ощути чистый звук — идеальные наушники ждут тебя!',
-      offer: 'Только сейчас — скидка 30%',
+      title: 'Уютный дом начинается с удобного дивана!',
+      offer: 'Только сейчас — скидка до 35%',
       buttonText1: 'Купить',
       buttonText2: 'Узнать больше',
-      imgSrc: assets.header_headphone_image,
+      imgSrc: assets.sofa,
     },
     {
       id: 2,
-      title: 'Игры нового уровня — познакомься с PlayStation 5!',
-      offer: 'Торопись, осталось совсем мало!',
+      title: 'Стильные кровати для идеального сна',
+      offer: 'Торопись! Акция заканчивается скоро',
       buttonText1: 'Купить сейчас',
       buttonText2: 'Посмотреть акции',
-      imgSrc: assets.header_playstation_image,
+      imgSrc: assets.bed,
     },
     {
       id: 3,
-      title: 'Мощь и стиль — MacBook Pro создан для тебя!',
-      offer: 'Эксклюзив — скидка 40%',
+      title: 'Кухонные гарнитуры мечты — функциональность и дизайн',
+      offer: 'Эксклюзивная скидка 30%',
       buttonText1: 'Заказать',
       buttonText2: 'Подробнее',
-      imgSrc: assets.header_macbook_image,
+      imgSrc: assets.kitchen,
     },
   ]
 

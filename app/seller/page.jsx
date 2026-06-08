@@ -130,12 +130,12 @@ const AddProduct = () => {
               onChange={(e) => setCategory(e.target.value)}
               defaultValue={category}
             >
-              <option value="Earphone">Наушники-вкладыши</option>
-              <option value="Headphone">Накладные наушники</option>
-              <option value="Watch">Смарт-часы</option>
-              <option value="Smartphone">Смартфоны</option>
-              <option value="Laptop">Ноутбуки</option>
-              <option value="Camera">Камеры</option>
+              <option value="Earphone">Диваны</option>
+              <option value="Headphone">Кровати</option>
+              <option value="Watch">Кухни</option>
+              <option value="Smartphone">Столы</option>
+              <option value="Laptop">Шкафы</option>
+              <option value="Camera">Стулья и кресла</option>
               <option value="Accessories">Аксессуары</option>
             </select>
           </div>
