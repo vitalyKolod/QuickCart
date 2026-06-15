@@ -38,6 +38,35 @@ const Orders = () => {
     }
   }, [user])
 
+  const updateStatus = async (orderId, status) => {
+    try {
+      const token = await getToken()
+
+      const { data } = await axios.post(
+        '/api/order/update-status',
+        {
+          orderId,
+          status,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+
+      if (data.success) {
+        toast.success('Статус обновлён')
+
+        fetchSellerOrders()
+      } else {
+        toast.error(data.message)
+      }
+    } catch (error) {
+      toast.error(error.message)
+    }
+  }
+
   return (
     <div className="flex-1 h-screen overflow-scroll flex flex-col justify-between text-sm">
       {loading ? (
@@ -89,12 +118,26 @@ const Orders = () => {
                 </p>
 
                 {/* Order info */}
-                <div>
-                  <p className="flex flex-col">
-                    <span>Способ: Наложенный платёж (COD)</span>
-                    <span>Дата: {new Date(order.date).toLocaleDateString()}</span>
-                    <span>Оплата: Ожидается</span>
-                  </p>
+                <div className="flex flex-col gap-2">
+                  <span>Способ: Карта</span>
+
+                  <span>Дата: {new Date(order.date).toLocaleDateString()}</span>
+
+                  <select
+                    value={order.status}
+                    onChange={(e) => updateStatus(order._id, e.target.value)}
+                    className="border rounded px-2 py-1"
+                  >
+                    <option value="Order Placed">Оформлен</option>
+
+                    <option value="Processing">В обработке</option>
+
+                    <option value="Shipped">Отправлен</option>
+
+                    <option value="Delivered">Доставлен</option>
+
+                    <option value="Cancelled">Отменён</option>
+                  </select>
                 </div>
               </div>
             ))}

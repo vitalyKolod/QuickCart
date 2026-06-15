@@ -46,32 +46,22 @@ const OrderSummary = () => {
         product: key,
         quantity: cartItems[key],
       }))
+
       cartItemsArray = cartItemsArray.filter((item) => item.quantity > 0)
 
       if (cartItemsArray.length === 0) {
         return toast.error('Корзина пуста')
       }
 
-      const token = await getToken()
-
-      const { data } = await axios.post(
-        '/api/order/create',
-        {
+      localStorage.setItem(
+        'pendingOrder',
+        JSON.stringify({
           address: selectedAddress._id,
           items: cartItemsArray,
-        },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
+        })
       )
 
-      if (data.success) {
-        toast.success(data.message)
-        setCartItems({})
-        router.push('/order-placed')
-      } else {
-        toast.error(data.message)
-      }
+      router.push('/payment')
     } catch (error) {
       toast.error(error.message)
     }

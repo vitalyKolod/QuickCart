@@ -97,7 +97,7 @@ const MyOrders = () => {
                     <p className="flex flex-col">
                       <span>Способ: Наложенный платёж (COD)</span>
                       <span>Дата: {new Date(order.date).toLocaleDateString()}</span>
-                      <span>Оплата: Ожидается</span>
+                      <span>Оплата: Успешно</span>
                     </p>
                   </div>
                 </div>

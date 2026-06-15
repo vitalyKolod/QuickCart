@@ -7,12 +7,40 @@ import Footer from '@/components/seller/Footer'
 import Loading from '@/components/Loading'
 import toast from 'react-hot-toast'
 import axios from 'axios'
+import { Trash2 } from 'lucide-react'
 
 const ProductList = () => {
   const { router, getToken, user } = useAppContext()
 
   const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(true)
+
+  const deleteProduct = async (productId) => {
+    if (!confirm('Удалить товар?')) return
+
+    try {
+      const token = await getToken()
+
+      const { data } = await axios.delete('/api/product/delete', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        data: {
+          productId,
+        },
+      })
+
+      if (data.success) {
+        toast.success(data.message)
+
+        setProducts((prev) => prev.filter((product) => product._id !== productId))
+      } else {
+        toast.error(data.message)
+      }
+    } catch (error) {
+      toast.error(error.message)
+    }
+  }
 
   const fetchSellerProduct = async () => {
     try {
@@ -79,13 +107,22 @@ const ProductList = () => {
                     <td className="px-4 py-3">${product.offerPrice}</td>
 
                     <td className="px-4 py-3 max-sm:hidden">
-                      <button
-                        onClick={() => router.push(`/product/${product._id}`)}
-                        className="flex items-center gap-1 px-1.5 md:px-3.5 py-2 bg-orange-600 text-white rounded-md"
-                      >
-                        <span className="hidden md:block">Открыть</span>
-                        <Image className="h-3.5" src={assets.redirect_icon} alt="redirect_icon" />
-                      </button>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => deleteProduct(product._id)}
+                          className="px-2 py-2 bg-red-500 text-white rounded-md"
+                        >
+                          <Trash2 />
+                        </button>
+
+                        <button
+                          onClick={() => router.push(`/product/${product._id}`)}
+                          className="flex items-center gap-1 px-3 py-2 bg-orange-600 text-white rounded-md"
+                        >
+                          <span className="hidden md:block">Открыть</span>
+                          <Image className="h-3.5" src={assets.redirect_icon} alt="redirect_icon" />
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
